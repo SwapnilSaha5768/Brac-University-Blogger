@@ -24,16 +24,7 @@
 
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bracuniversityblogger";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once "database.php";
 if (isset($_POST["submit"])) {
 	$search_username = $_POST["search"];
 

@@ -4,7 +4,8 @@
         header("Location: login.php");
         
 }
-$mysqli = new mysqli("localhost", "root", "", "bracuniversityblogger");
+require_once "database.php";
+$mysqli = $conn;
 
 // follower count
 function getFollowerCount($userId, $mysqli) {

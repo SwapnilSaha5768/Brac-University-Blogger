@@ -39,16 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
  
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "bracuniversityblogger";
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+require_once "database.php";
 
     $checkUserQuery = "SELECT id FROM users WHERE username = '$following'";
     $result = $conn->query($checkUserQuery);
