@@ -24,9 +24,9 @@ if (!isset($_SESSION["user"])) {
         <?php
   
         if (isset($_POST["publish"])) {
-            $title = $_POST["title"];
-            $description = $_POST["description"];
-            $category = $_POST["category"];
+            $title = $_POST["title"] ?? "";
+            $description = $_POST["description"] ?? "";
+            $category = $_POST["category"] ?? "";
             $errors = array();
             require_once "database.php";
 

@@ -2,6 +2,34 @@
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
+   die();
+}
+
+$errorMsg = "";
+if (isset($_POST["login"])) {
+    $username = $_POST["username"] ?? "";
+    $fullname = $_POST["fullname"] ?? "";
+    $password = $_POST["password"] ?? "";
+    
+    require_once "database.php";
+    $sql = "SELECT * FROM users WHERE username = '$username' && fullname = '$fullname'";
+    $result = mysqli_query($conn, $sql);
+    $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    
+    if ($user) {
+        if (password_verify($password, $user["password"])) {
+             // Session is already started at the top
+            $_SESSION['username'] = $username;
+            $_SESSION['fullname'] = $fullname;
+            $_SESSION["user"] = "yes";
+            header("Location: index.php");
+            die();
+        } else {
+            $errorMsg = "<div class='alert alert-danger'>Password does not match</div>";
+        }
+    } else {
+        $errorMsg = "<div class='alert alert-danger'>User Name and FullName does not match</div>";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -24,29 +52,8 @@ if (isset($_SESSION["user"])) {
         </div>
         <div class="auth-container">
             <?php
-            if (isset($_POST["login"])) {
-            $username = $_POST["username"];
-            $fullname = $_POST["fullname"];
-            $password = $_POST["password"];
-                require_once "database.php";
-                $sql = "SELECT * FROM users WHERE username = '$username' && fullname = '$fullname'";
-                $result = mysqli_query($conn, $sql);
-                $total = mysqli_num_rows($result);
-                $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                if ($user) {
-                    if (password_verify($password, $user["password"])) {
-                        session_start();
-                        $_SESSION['username'] = $username;
-                        $_SESSION['fullname'] = $fullname;
-                        $_SESSION["user"] = "yes";
-                        header("Location: index.php");
-                        die();
-                    }else{
-                        echo "<div class='alert alert-danger'>Password does not match</div>";
-                    }
-                }else{
-                    echo "<div class='alert alert-danger'>User Name and FullName does not match</div>";
-                }
+            if (!empty($errorMsg)) {
+                echo $errorMsg;
             }
             ?>
         <form action="login.php" method="post">

@@ -23,13 +23,13 @@ if (isset($_SESSION["user"])) {
             </div>
             <?php
             if (isset($_POST["submit"])) {
-            $fullName = $_POST["fullname"];
-            $username = $_POST["username"];
-            $iden = $_POST["iden"];
-            $dateofbirth = $_POST["dob"];
-            $email = $_POST["email"];
-            $password = $_POST["password"];
-            $passwordRepeat = $_POST["repeat_password"];
+            $fullName = $_POST["fullname"] ?? "";
+            $username = $_POST["username"] ?? "";
+            $iden = $_POST["iden"] ?? "";
+            $dateofbirth = $_POST["dob"] ?? "";
+            $email = $_POST["email"] ?? "";
+            $password = $_POST["password"] ?? "";
+            $passwordRepeat = $_POST["repeat_password"] ?? "";
             
             
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);

@@ -234,36 +234,48 @@ ul {
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 25px;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
     border: 1px solid var(--border-color);
+    transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .post-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .post-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--primary-color);
+    font-weight: 600;
 }
 
 .post-header small {
-    color: #888;
-    font-size: 0.85rem;
+    color: #999;
+    font-size: 0.8rem;
 }
 
 .post-content h5 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
     color: var(--text-color);
+    font-weight: 700;
 }
 
 .post-content p {
     color: var(--text-light);
     margin-bottom: 15px;
-    line-height: 1.6;
+    line-height: 1.7;
+    font-size: 1rem;
 }
 
 .post-content .category {
@@ -274,12 +286,13 @@ ul {
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
+    margin-bottom: 12px;
 }
 
 .post-actions {
-    margin-top: 20px;
+    margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #f0f0f0;
     display: flex;
     gap: 15px;
 }
@@ -287,17 +300,92 @@ ul {
 .action-btn {
     background: transparent;
     border: 1px solid var(--border-color);
-    padding: 6px 15px;
-    border-radius: 20px;
+    padding: 8px 18px;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 0.9rem;
     color: var(--text-light);
-    transition: 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .action-btn:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
+    background-color: #f8f9ff;
+}
+
+/* Comments Section */
+.comment-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.comment-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.comment-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.comment-box input:focus {
+    border-color: var(--primary-color);
+}
+
+.comment-box button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.comment-box button:hover {
+    background: var(--primary-hover);
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-item {
+    background: #fff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    font-size: 0.92rem;
+}
+
+.comment-item strong {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.comment-item small {
+    display: block;
+    color: #aaa;
+    font-size: 0.75rem;
+    margin-top: 4px;
 }
 
 /* Right Sidebar Elements */
@@ -341,15 +429,28 @@ ul {
 .profile-page-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    /* Align to top */
     min-height: 100vh;
     padding: 20px;
+    gap: 40px;
+    /* Space between columns */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.profile-posts {
+    flex: 1;
+    /* Take up remaining space */
+    max-width: 800px;
 }
 
 .profile-card {
     background: var(--card-bg);
-    width: 100%;
-    max-width: 500px;
+    width: 350px;
+    /* Fixed width for sidebar */
+    flex-shrink: 0;
+    /* Prevent shrinking */
     padding: 50px 30px;
     border-radius: 20px;
     text-align: center;

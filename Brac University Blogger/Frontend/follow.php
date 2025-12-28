@@ -44,7 +44,7 @@
 $follower = $_SESSION["username"];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $following = $_POST["following"];
+    $following = $_POST["following"] ?? "";
 
 
  
