@@ -191,15 +191,24 @@
             }
 
             // Function to render a single comment item
-            function renderCommentItem($comment, $isReply = false) {
+            function renderCommentItem($comment, $isReply = false, $postOwnerId = 0, $currentUserId = 0) {
                 $cName = htmlspecialchars($comment['fullname']);
                 $cBody = htmlspecialchars($comment['comment']);
                 $cId = $comment['id'];
                 $styleClass = $isReply ? 'comment-item nested-reply' : 'comment-item';
                 
-                echo "<div class='$styleClass'>";
+                echo "<div class='$styleClass' style='position: relative; padding-right: 30px;'>";
                 echo "<strong>$cName</strong> <span> $cBody </span>";
                 
+                // Delete Button Permission Check
+                // User can delete if they own the comment OR they own the post
+                if ($currentUserId == $comment['user_id'] || $currentUserId == $postOwnerId) {
+                    echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                    echo "<input type='hidden' name='comment_id' value='$cId'>";
+                    echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
+                    echo "</form>";
+                }
+
                 if (!$isReply) { // Only allow 1 level of nesting for simplicity
                      echo "<span class='reply-link' onclick='toggleReply($cId)'>Reply</span>";
                      // Hidden Reply Form
@@ -218,11 +227,11 @@
             // Filter parent comments
             foreach ($allComments as $comment) {
                 if (empty($comment['parent_id'])) {
-                    renderCommentItem($comment);
+                    renderCommentItem($comment, false, $row['user_id'], $ui);
                     // Find and render replies
                     foreach ($allComments as $reply) {
                         if ($reply['parent_id'] == $comment['id']) {
-                            renderCommentItem($reply, true);
+                            renderCommentItem($reply, true, $row['user_id'], $ui);
                         }
                     }
                 }

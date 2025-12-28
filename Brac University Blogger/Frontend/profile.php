@@ -118,22 +118,61 @@ if ($userRow) {
                         echo "</form>";
                         echo "</div>";
 
-                        // Comments Section (View Only)
+                        // Comments Section
                         echo "<div class='comment-section'>";
                         echo "<h6>Comments</h6>";
                         
                         $commentSql = "SELECT comments.*, users.fullname, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $blogId ORDER BY created_at ASC";
                         $commentResult = mysqli_query($conn, $commentSql);
                         
+                        $allComments = [];
                         if (mysqli_num_rows($commentResult) > 0) {
+                            while ($c = mysqli_fetch_assoc($commentResult)) {
+                                $allComments[] = $c;
+                            }
+                        }
+
+                        if (!empty($allComments)) {
                             echo "<div class='comment-list'>";
-                            while ($comment = mysqli_fetch_assoc($commentResult)) {
-                                $cName = htmlspecialchars($comment['fullname']);
-                                $cBody = htmlspecialchars($comment['comment']);
-                                
-                                echo "<div class='comment-item'>";
-                                echo "<strong>$cName</strong> <span> $cBody </span>";
-                                echo "</div>";
+                            
+                            foreach ($allComments as $comment) {
+                                if (empty($comment['parent_id'])) {
+                                    // Parent
+                                    $cName = htmlspecialchars($comment['fullname']);
+                                    $cBody = htmlspecialchars($comment['comment']);
+                                    $cId = $comment['id'];
+                                    
+                                    echo "<div class='comment-item' style='position: relative; padding-right: 30px;'>";
+                                    echo "<strong>$cName</strong> <span> $cBody </span>";
+                                    
+                                    // Delete Button (I am profile owner => I own post => I can delete all)
+                                    echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                    echo "<input type='hidden' name='comment_id' value='$cId'>";
+                                    echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
+                                    echo "</form>";
+
+                                    echo "</div>";
+
+                                    // Children
+                                    foreach ($allComments as $reply) {
+                                        if ($reply['parent_id'] == $comment['id']) {
+                                            $rName = htmlspecialchars($reply['fullname']);
+                                            $rBody = htmlspecialchars($reply['comment']);
+                                            $rId = $reply['id'];
+                                            
+                                            echo "<div class='comment-item nested-reply' style='position: relative; padding-right: 30px;'>";
+                                            echo "<strong>$rName</strong> <span> $rBody </span>";
+                                            
+                                            // Delete Button (I own post)
+                                            echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                            echo "<input type='hidden' name='comment_id' value='$rId'>";
+                                            echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
+                                            echo "</form>";
+
+                                            echo "</div>";
+                                        }
+                                    }
+                                }
                             }
                             echo "</div>";
                         } else {
@@ -178,6 +217,23 @@ if ($userRow) {
                    <h2><?php echo $followingCount; ?></h2>
                  </div>
                </div>
+              
+              <!-- Delete Account Button -->
+              <form action="delete_account.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone and will delete all your posts and data.');" style="margin-top: 20px; padding-bottom: 20px;">
+                  <button type="submit" name="confirm_delete" style="
+                        background: transparent; 
+                        color: #ff6b6b; 
+                        border: 1px solid #ff6b6b;
+                        padding: 8px 15px;
+                        border-radius: 20px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                        transition: all 0.3s ease;
+                  " onmouseover="this.style.background='#ff6b6b'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#ff6b6b';">
+                      Delete Account
+                  </button>
+              </form>
              </div>
     </div>
 

@@ -191,14 +191,25 @@
                           echo "<div class='comment-list'>";
                           // Helper function for rendering
                            // Simplified logic since function definition inside loop is bad.
-                           // I will iterate manually.
+                           // Helper function for rendering
                           foreach ($allComments as $comment) {
                               if (empty($comment['parent_id'])) {
                                   // Parent
                                   $cName = htmlspecialchars($comment['fullname']);
                                   $cBody = htmlspecialchars($comment['comment']);
-                                  echo "<div class='comment-item'>";
+                                  $cId = $comment['id'];
+                                  
+                                  echo "<div class='comment-item' style='position: relative; padding-right: 30px;'>";
                                   echo "<strong>$cName</strong> <span> $cBody </span>";
+                                  
+                                  // Delete Button
+                                  if ($current_user_id == $comment['user_id'] || $current_user_id == $row['user_id']) {
+                                      echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                      echo "<input type='hidden' name='comment_id' value='$cId'>";
+                                      echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
+                                      echo "</form>";
+                                  }
+
                                   echo "</div>";
 
                                   // Children
@@ -206,8 +217,19 @@
                                       if ($reply['parent_id'] == $comment['id']) {
                                           $rName = htmlspecialchars($reply['fullname']);
                                           $rBody = htmlspecialchars($reply['comment']);
-                                          echo "<div class='comment-item nested-reply'>";
+                                          $rId = $reply['id'];
+                                          
+                                          echo "<div class='comment-item nested-reply' style='position: relative; padding-right: 30px;'>";
                                           echo "<strong>$rName</strong> <span> $rBody </span>";
+                                          
+                                          // Delete Button
+                                          if ($current_user_id == $reply['user_id'] || $current_user_id == $row['user_id']) {
+                                              echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                              echo "<input type='hidden' name='comment_id' value='$rId'>";
+                                              echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
+                                              echo "</form>";
+                                          }
+                                          
                                           echo "</div>";
                                       }
                                   }
