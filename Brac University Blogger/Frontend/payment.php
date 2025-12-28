@@ -4,65 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Gateway</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
+<div class="auth-body">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Payment Gateway</h1>
+        </div>
+        <form action="/process_payment" method="post">
+            <div class="form-group">
+                <label for="card_number" class="form-label">Card Number:</label>
+                <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" class="form-control" required>
+            </div>
 
-<form action="/process_payment" method="post">
-    <label for="card_number">Card Number:</label>
-    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" required>
+            <div class="form-group">
+                <label for="expiry_date" class="form-label">Expiry Date:</label>
+                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" class="form-control" required>
+            </div>
 
-    <label for="expiry_date">Expiry Date:</label>
-    <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" required>
-
-    <label for="cvv">CVV:</label>
-    <input type="text" id="cvv" name="cvv" placeholder="123" required>
-
-    <button type="submit">Submit Payment</button>
-</form>
-
+            <div class="form-group">
+                <label for="cvv" class="form-label">CVV:</label>
+                <input type="text" id="cvv" name="cvv" placeholder="123" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn-primary">Submit Payment</button>
+            </div>
+            <div class="text-center mt-4">
+                <a href="index.php" style="color:var(--primary-color);">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

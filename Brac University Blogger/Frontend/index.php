@@ -13,15 +13,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <title>Brac University Blogger</title>
 </head>
-<div class="body-container">
+<body>
+<div class="dashboard-container">
         <div class="sidebar">
-            <ul>
+            <ul class="sidebar-menu">
                 <li>
-                    <a href="index.php">
+                    <a href="index.php" class="active">
                         <i class="bx bx-home"></i>
                         <span class="nav-item">Home</span>
                     </a>
@@ -51,41 +51,26 @@
                     </a>
                 </li>
             </ul>
-            <li>
-
-                 <img src="uploads\default.png"class="profile-pic"> </li>
-            <div class="user">
-                <?php
-                echo $_SESSION["fullname"]."<br>";
-                echo "user: @".$_SESSION["username"];
-                ?>
+            
+            <div class="user-info">
+                 <img src="uploads/default.png" class="profile-pic-small">
+                 <div>
+                    <?php
+                    echo "<strong>" . $_SESSION["fullname"] . "</strong><br>";
+                    echo "<small>@" . $_SESSION["username"] . "</small>";
+                    ?>
+                 </div>
             </div>
         </div>            
         
-        <div class="main-content flex-column">
-            <div class="options">
-                <a href="search.php" class="explore">
-                    <h2>Explore</h2>
-                </a>
-                <a href="" class="explore">
-                    <h2>Interest</h2>
-                </a>
-                <a href="follow.php" class="explore">
-                    <h2>Follow</h2>
-                </a>
-                <!--<div class="options-search-button">
-                    <input type="text" class="search-input" placeholder="Search">
-                    *<button type="submit" class="search-button">
-                        <i class="fa fa-search"></i>
-                    </button>       
-                </div> -->   
+        <div class="main-content">
+            <div class="options-bar">
+                <a href="search.php">Explore</a>
+                <a href="#">Interest</a>
+                <a href="follow.php">Follow</a>
             </div>
-            <div class="article-container flex-column">
-                <article id="first" class="flex-column">
-                    <div class="article-top flex-row">
-                        <title>Post</title>
-                    </div>
-                    <div class="article-bottom">
+            
+            <div class="posts-list">
     <?php
     $follower = $_SESSION["username"];
     require_once "database.php";
@@ -109,69 +94,66 @@
              blog_id = $blogId AND reaction_type = 'like'"))['count'];
             $dislikeCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM 
             reactions WHERE blog_id = $blogId AND reaction_type = 'dislike'"))['count'];
-            echo "<div class='post2'>";
-            echo "<h7>{$row['fullname']}</h3>"."<br>";
-            echo "Username: @"."<h7>{$row['username']}</h3>";
-            echo "<h3>{$row['title']}</h5>"."<br>";
-            echo "Description: "."<p>{$row['description']}</p>";
-            echo "Category: "."<p>{$row['category']}</p>";
-            echo "<small>{$row['timestamp_column']}</small>";
-            echo "<form method='Post' action='handle_reaction.php'>";
-            echo "<input type='hidden' name='blog_id' value={$row['id']}>";
+            
+            // Post Card Structure
+            echo "<div class='post-card'>";
+            
+            // Header
+            echo "<div class='post-header'>";
+            echo "<h3>" . htmlspecialchars($row['fullname']) . " <small>(@" . htmlspecialchars($row['username']) . ")</small></h3>";
+            echo "<small>" . $row['timestamp_column'] . "</small>";
+            echo "</div>";
 
-            echo "<button type='submit' name='reaction' value='like'>";
-            echo "Like ($likeCount)";
+            // Content
+            echo "<div class='post-content'>";
+            echo "<h5>" . htmlspecialchars($row['title']) . "</h5>";
+            echo "<span class='category'>" . htmlspecialchars($row['category']) . "</span>";
+            echo "<p>" . nl2br(htmlspecialchars($row['description'])) . "</p>";
+            echo "</div>";
+
+            // Actions
+            echo "<div class='post-actions'>";
+            echo "<form method='Post' action='handle_reaction.php' style='display:flex; gap:10px;'>";
+            echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
+
+            echo "<button type='submit' name='reaction' value='like' class='action-btn'>";
+            echo "<i class='bx bx-like'></i> Like ($likeCount)";
             echo "</button>";
 
-            echo "<button type='submit' name='reaction' value='dislike'>";
-            echo "Dislike ($dislikeCount)";
+            echo "<button type='submit' name='reaction' value='dislike' class='action-btn'>";
+            echo "<i class='bx bx-dislike'></i> Dislike ($dislikeCount)";
             echo "</button>";
 
             echo "</form>";
-            echo "</div>";
+            echo "</div>"; // End Actions
+            
+            echo "</div>"; // End Post Card
 
         }
     } else {
-        echo "No posts found.";
+        echo "<p>No posts found.</p>";
     }
 
     ?>
-                    </div>
-                    <div class="article-bottom">
-                        <p></p>
-                    </div>
-                </article>
-
             </div>    
         </div>
         
         <div class="right-sidebar">
-            <!-- <div class="container">
-            </div> -->
-            <div class="right-top-button-container">
-                <button class="logout-button"><a href="logout.php">Sign Out</button></a>
-              </div>
-            <div class="postbox">
-                <!-- <form class="search-form"> -->
+            <div class="post-box">
                 <form>
                     <div class="input">
-                        <i class="fa fa-user" aria-hidden="true"></i>
                         <input type="text" placeholder="What's in your mind?">
                     </div>
-                    <button class="Button">
-                        Post
-                    </button>
+                    <button>Post</button>
+                    <div style="clear:both;"></div>
                 </form>
             </div>
             
-            <div class="notification">
-                <h2>Calendar</h2>
+            <div class="calendar-widget">
                 <iframe src="https://www.bracu.ac.bd/sites/default/files/academics/Year-planner/yp23.png" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
     </div>    
 
 </body>
-
-
 </html>

@@ -44,16 +44,16 @@ if ($userRow) {
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 
     <title>Profile</title>
     
 </head>
 <body>
-<div class="container">
+<div class="profile-page-container">
   
-  <div class="Profile">
-    <img src="pic2.png" class="profile-pic">
+  <div class="profile-card">
+    <img src="assets/images/pic2.png" class="profile-pic">
 
     <h4>
         <?php
@@ -63,12 +63,12 @@ if ($userRow) {
 
     <!--<a href="follow.php" class="follow-btn">Follow</a>-->
     <a href="index.php" class="follow-btn">Home</a>
-    <div class="row">
-      <div>
+    <div class="profile-stats">
+      <div class="stat-item">
         <p>Followers</p>
         <h2><?php echo $followerCount; ?></h2>
       </div>
-      <div>
+      <div class="stat-item">
         <p>Following</p>
         <h2><?php echo $followingCount; ?></h2>
       </div>
@@ -76,5 +76,4 @@ if ($userRow) {
   </div>
 </div>
 </body>
-
 </html>

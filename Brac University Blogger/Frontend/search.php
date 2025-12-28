@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="assets/css/main.css">
 	<title>Search Bar</title>
 </head>
 <body>
 
-<form method="post">
-<label>Search</label>
-		<div class="form-group">
-            <input type="text" placeholder="Enter Username:" name="search">
+<div class="auth-body">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Search User</h1>
         </div>
-        <div class="form-btn">
-            <input type="submit" value="submit" name="submit">
-			<a href="index.php">Home</a>
-        </div>
-	
-</form>
+        <form method="post">
+            <div class="form-group">
+                <label class="form-label" style="display:block; margin-bottom:5px;">Username</label>
+                <input type="text" placeholder="Enter Username:" name="search" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" name="submit" class="btn-primary">
+            </div>
+            <div class="text-center mt-4">
+                <a href="index.php" style="color:var(--primary-color);">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

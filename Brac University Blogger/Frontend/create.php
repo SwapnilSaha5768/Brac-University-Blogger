@@ -12,24 +12,15 @@ if (!isset($_SESSION["user"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        header {
-            color: #333;
-            padding: 1em;
-            text-align: center;
-        }
-
-
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
-<header>
-    <h1>Create Post</h1>
-    </header>
-    <div class="container">
+<div class="auth-body">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Create Post</h1>
+        </div>
         <?php
   
         if (isset($_POST["publish"])) {
@@ -60,14 +51,14 @@ if (!isset($_SESSION["user"])) {
 
       <form action="create.php" method="post">
         <div class="form-group">
-            <input type="text" placeholder="title:" name="title" class="form-control">
+            <input type="text" placeholder="Title:" name="title" class="form-control" required>
         </div>
         <div class="form-group">
-            <input type="text" placeholder="Description:" name="description" class="form-control">
+            <textarea placeholder="Description:" name="description" class="form-control" rows="5" required style="resize:vertical;"></textarea>
         </div>
         <div class="form-group">
-            <label for="category"> Category </label>
-            <select name="category">
+            <label for="category" class="form-label" style="display:block; margin-bottom:5px;">Category</label>
+            <select name="category" class="form-control">
                 <option>Select</option>
                 <option value="Food">Food</option>
                 <option value="Travel">Travel</option>
@@ -79,10 +70,13 @@ if (!isset($_SESSION["user"])) {
         </div>
         
         <div class="form-btn">
-            <input type="submit" value="Create Post" name="publish" class="follow-btn">
-            <a href="index.php" class="follow-btn">Home</a>
+            <input type="submit" value="Create Post" name="publish" class="btn-primary">
+        </div>
+        <div class="text-center mt-4">
+            <a href="index.php" style="color:var(--primary-color);">Back to Home</a>
         </div>
       </form>
     </div>
+</div>
 </body>
 </html>

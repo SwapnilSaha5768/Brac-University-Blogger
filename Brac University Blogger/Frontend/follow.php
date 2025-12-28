@@ -10,22 +10,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Follow/Unfollow Users</title>
-    <link rel="stylesheet" href="follow.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Follow/Unfollow Users</h2>
+    <div class="auth-body">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Follow/Unfollow Users</h2>
+            </div>
 
-        <form action="follow.php" method="post">
-            <label for="following">Username to Follow/Unfollow:</label>
-            <input type="text" id="following" name="following" required>
+            <form action="follow.php" method="post">
+                <div class="form-group">
+                    <label for="following" class="form-label" style="margin-bottom:10px; display:block;">Username to Follow/Unfollow:</label>
+                    <input type="text" id="following" name="following" class="form-control" required placeholder="Enter username here...">
+                </div>
 
-            <button type="submit" name="follow">Follow</button><br>
-            <button type="submit" name="unfollow">Unfollow</button><br>
-            <a href="index.php" class="follow-btn">Home</a>
-        </form>
+                <div class="form-group">
+                    <button type="submit" name="follow" class="btn-primary" style="margin-bottom:10px;">Follow</button>
+                    <button type="submit" name="unfollow" class="btn-primary" style="background-color: #dc3545; margin-bottom:10px;">Unfollow</button>
+                </div>
+                <div class="text-center">
+                    <a href="index.php" style="color:var(--primary-color);">Back to Home</a>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
