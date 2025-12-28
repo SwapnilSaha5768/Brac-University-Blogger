@@ -44,7 +44,6 @@ if (isset($_POST["submit"])) {
     <div class="main-content">
         <div class="options-bar">
             <a href="explore.php">Explore</a>
-            <a href="#">Interest</a>
         </div>
 
         <div class="auth-container" style="max-width: 600px; margin: 50px auto;">
@@ -57,10 +56,55 @@ if (isset($_POST["submit"])) {
                     echo "<div class='alert alert-danger'>$errorMsg</div>";
                 }
                 ?>
-                <div class="form-group">
+                <div class="form-group" style="position:relative;">
                     <label class="form-label" style="display:block; margin-bottom:5px;">Username</label>
-                    <input type="text" placeholder="Enter Username:" name="search" class="form-control" required>
+                    <input type="text" placeholder="Enter Username:" name="search" id="search-input" class="form-control" autocomplete="off" required>
+                    <div id="suggestion-box" class="suggestion-box"></div>
                 </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function(){
+                        $("#search-input").on("keyup", function(){
+                            var query = $(this).val();
+                            if (query.length > 0) {
+                                $.ajax({
+                                    url: "get_suggestions.php",
+                                    method: "POST",
+                                    data: {query: query},
+                                    success: function(data){
+                                        var suggestions = JSON.parse(data);
+                                        var html = "";
+                                        if(suggestions.length > 0){
+                                            $.each(suggestions, function(index, user){
+                                                html += '<div class="suggestion-item" onclick="selectUser('+user.id+')">';
+                                                html += '<img src="uploads/default.png" alt="dp">'; // Simplified, ideally user.profile_pic
+                                                html += '<div><strong>'+user.fullname+'</strong><br><small>@'+user.username+'</small></div>';
+                                                html += '</div>';
+                                            });
+                                            $("#suggestion-box").html(html).show();
+                                        } else {
+                                            $("#suggestion-box").hide();
+                                        }
+                                    }
+                                });
+                            } else {
+                                $("#suggestion-box").hide();
+                            }
+                        });
+
+                        // Hide on click outside
+                        $(document).on("click", function(e){
+                            if (!$(e.target).closest(".form-group").length) {
+                                $("#suggestion-box").hide();
+                            }
+                        });
+                    });
+
+                    function selectUser(id) {
+                        window.location.href = "friend-profile.php?user_id=" + id;
+                    }
+                </script>
                 <div class="form-group">
                     <input type="submit" value="Search" name="submit" class="btn-primary">
                 </div>

@@ -101,114 +101,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($fullname); ?>'s Profile</title>
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <script>
+    function toggleReply(id) {
+        var form = document.getElementById('reply-form-' + id);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+    </script>
 </head>
 <body>
 
-<div class="profile-page-container">
-  
-  <!-- Left Column: User's Posts -->
-  <div class="profile-posts">
-      <?php
-      $sql = "SELECT post.*, users.fullname, users.username 
-              FROM post 
-              JOIN users ON post.user_id = users.id 
-              WHERE post.user_id = $userId 
-              ORDER BY post.timestamp_column DESC";
-      $result = $mysqli->query($sql);
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>
 
-      if ($result->num_rows > 0) {
-          while($row = $result->fetch_assoc()) {
-              $blogId = $row['id'];
-              $likeCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM reactions WHERE blog_id = $blogId AND reaction_type = 'like'"))['count'];
-              $dislikeCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM reactions WHERE blog_id = $blogId AND reaction_type = 'dislike'"))['count'];
-
-              echo "<div class='post-card'>";
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <div class="profile-page-container" style="padding: 0; margin: 0; max-width: 100%;">
+          
+          <!-- Left Column: User's Posts -->
+          <div class="profile-posts">
               
-              // Header
-              echo "<div class='post-header'>";
-              echo "<div>";
-              echo "<h3>" . htmlspecialchars($row['fullname']) . " <small>(@" . htmlspecialchars($row['username']) . ")</small></h3>";
-              echo "<small>" . $row['timestamp_column'] . "</small>";
-              echo "</div>";
-              echo "</div>";
+              <div class="options-bar">
+                  <span class="active">Posts</span>
+              </div>
 
-              // Content
-              echo "<div class='post-content'>";
-              echo "<h5>" . htmlspecialchars($row['title']) . "</h5>";
-              echo "<span class='category'>" . htmlspecialchars($row['category']) . "</span>";
-              echo "<p>" . nl2br(htmlspecialchars($row['description'])) . "</p>";
-              echo "</div>";
+              <?php
+              $sql = "SELECT post.*, users.fullname, users.username 
+                      FROM post 
+                      JOIN users ON post.user_id = users.id 
+                      WHERE post.user_id = $userId 
+                      ORDER BY post.timestamp_column DESC";
+              $result = $mysqli->query($sql);
 
-              // Actions
-              echo "<div class='post-actions'>";
-              echo "<form method='Post' action='handle_reaction.php' style='display:flex; gap:10px;'>";
-              echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
-              echo "<input type='hidden' name='redirect' value='friend-profile.php?user_id=$userId'>";
-              echo "<button type='submit' name='reaction' value='like' class='action-btn'><i class='bx bx-like'></i> Like ($likeCount)</button>";
-              echo "<button type='submit' name='reaction' value='dislike' class='action-btn'><i class='bx bx-dislike'></i> Dislike ($dislikeCount)</button>";
-              echo "</form>";
-              echo "</div>";
+              if ($result->num_rows > 0) {
+                  while($row = $result->fetch_assoc()) {
+                      $blogId = $row['id'];
+                      $likeCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM reactions WHERE blog_id = $blogId AND reaction_type = 'like'"))['count'];
+                      $dislikeCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS count FROM reactions WHERE blog_id = $blogId AND reaction_type = 'dislike'"))['count'];
 
-              // Comments (View Only)
-              echo "<div class='comment-section'>";
-              echo "<h6>Comments</h6>";
-              $commentSql = "SELECT comments.*, users.fullname, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $blogId ORDER BY created_at ASC";
-              $commentResult = mysqli_query($conn, $commentSql);
-              if (mysqli_num_rows($commentResult) > 0) {
-                  echo "<div class='comment-list'>";
-                  while ($comment = mysqli_fetch_assoc($commentResult)) {
-                      echo "<div class='comment-item'>";
-                      echo "<strong>" . htmlspecialchars($comment['fullname']) . "</strong> <span> " . htmlspecialchars($comment['comment']) . " </span>";
+                      echo "<div class='post-card'>";
+                      
+                      // Header
+                      echo "<div class='post-header'>";
+                      echo "<div>";
+                      echo "<h3>" . htmlspecialchars($row['fullname']) . " <small>(@" . htmlspecialchars($row['username']) . ")</small></h3>";
+                      echo "<small>" . $row['timestamp_column'] . "</small>";
                       echo "</div>";
+                      echo "</div>";
+
+                      // Content
+                      echo "<div class='post-content'>";
+                      echo "<h5>" . htmlspecialchars($row['title']) . "</h5>";
+                      echo "<span class='category'>" . htmlspecialchars($row['category']) . "</span>";
+                      echo "<p>" . nl2br(htmlspecialchars($row['description'])) . "</p>";
+                      echo "</div>";
+
+                      // Actions
+                      echo "<div class='post-actions'>";
+                      echo "<form method='Post' action='handle_reaction.php' style='display:flex; gap:10px;'>";
+                      echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
+                      echo "<input type='hidden' name='redirect' value='friend-profile.php?user_id=$userId'>";
+                      echo "<button type='submit' name='reaction' value='like' class='action-btn'><i class='bx bx-like'></i> ($likeCount)</button>";
+                      echo "<button type='submit' name='reaction' value='dislike' class='action-btn'><i class='bx bx-dislike'></i> ($dislikeCount)</button>";
+                      echo "</form>";
+                      echo "</div>";
+
+                      // Comments (View Only + Reply)
+                      echo "<div class='comment-section'>";
+                      echo "<h6>Comments</h6>";
+                      
+                      // Fetch all comments (including replies)
+                      $commentSql = "SELECT comments.*, users.fullname, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $blogId ORDER BY created_at ASC";
+                      $commentResult = mysqli_query($conn, $commentSql);
+                      $allComments = [];
+                      if (mysqli_num_rows($commentResult) > 0) {
+                          while ($c = mysqli_fetch_assoc($commentResult)) {
+                              $allComments[] = $c;
+                          }
+                      }
+                      
+                      if (!empty($allComments)) {
+                          echo "<div class='comment-list'>";
+                          // Helper function for rendering
+                           // Simplified logic since function definition inside loop is bad.
+                           // I will iterate manually.
+                          foreach ($allComments as $comment) {
+                              if (empty($comment['parent_id'])) {
+                                  // Parent
+                                  $cName = htmlspecialchars($comment['fullname']);
+                                  $cBody = htmlspecialchars($comment['comment']);
+                                  echo "<div class='comment-item'>";
+                                  echo "<strong>$cName</strong> <span> $cBody </span>";
+                                  echo "</div>";
+
+                                  // Children
+                                  foreach ($allComments as $reply) {
+                                      if ($reply['parent_id'] == $comment['id']) {
+                                          $rName = htmlspecialchars($reply['fullname']);
+                                          $rBody = htmlspecialchars($reply['comment']);
+                                          echo "<div class='comment-item nested-reply'>";
+                                          echo "<strong>$rName</strong> <span> $rBody </span>";
+                                          echo "</div>";
+                                      }
+                                  }
+                              }
+                          }
+                          echo "</div>";
+                      } else {
+                          echo "<p class='text-muted' style='font-size:0.85rem;'>No comments yet.</p>";
+                      }
+                      echo "</div>"; // End Comments
+
+                      echo "</div>"; // End Post Card
                   }
-                  echo "</div>";
               } else {
-                  echo "<p class='text-muted' style='font-size:0.85rem;'>No comments yet.</p>";
+                  echo "<div class='alert alert-info'>This user hasn't posted anything yet.</div>";
               }
-              echo "</div>"; // End Comments
+              ?>
+          </div>
 
-              echo "</div>"; // End Post Card
-          }
-      } else {
-          echo "<div class='alert alert-info'>This user hasn't posted anything yet.</div>";
-      }
-      ?>
-  </div>
+          <!-- Right Column: Profile Card -->
+          <div class="profile-card">
+            <div class="profile-header-banner"></div>
+            <div style="position: relative;">
+                <img src="uploads/default.png" class="profile-pic">
+            </div>
+            
+            <h1 style="margin-top: 10px;"><?php echo htmlspecialchars($fullname); ?></h1>
+            <h4><?php echo "@" . htmlspecialchars($username); ?></h4>
 
-  <!-- Right Column: Profile Card -->
-  <div class="profile-card">
-    <img src="uploads/default.png" class="profile-pic">
-    
-    <h1><?php echo htmlspecialchars($fullname); ?></h1>
-    <h4><?php echo "user: @" . htmlspecialchars($username); ?></h4>
+            <!-- Follow / Unfollow Button -->
+            <?php if ($userId != $current_user_id): ?>
+                <form method="post" style="margin-top: 20px;">
+                    <button type="submit" name="toggle_follow" class="follow-btn" style="
+                        background: <?php echo $isFollowing ? '#fff' : 'var(--primary-color)'; ?>; 
+                        color: <?php echo $isFollowing ? 'var(--primary-color)' : '#fff'; ?>; 
+                        border: 1px solid var(--primary-color);
+                        padding: 8px 25px;
+                        border-radius: 20px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">
+                        <?php echo $isFollowing ? "Unfollow" : "Follow"; ?>
+                    </button>
+                </form>
+            <?php endif; ?>
 
-    <!-- Follow / Unfollow Button -->
-    <?php if ($userId != $current_user_id): ?>
-        <form method="post">
-            <button type="submit" name="toggle_follow" class="follow-btn" style="background:<?php echo $isFollowing ? '#fff' : 'var(--primary-color)'; ?>; color:<?php echo $isFollowing ? 'var(--primary-color)' : '#fff'; ?>; cursor:pointer;">
-                <?php echo $isFollowing ? "Unfollow" : "Follow"; ?>
-            </button>
-        </form>
-    <?php endif; ?>
-    
-    <div class="mt-4">
-        <a href="index.php" style="color:var(--text-light); text-decoration:underline;">Back to Home</a>
+            <div class="profile-stats">
+              <div class="stat-item">
+                <p>Followers</p>
+                <h2><?php echo $followerCount; ?></h2>
+              </div>
+              <div class="stat-item">
+                <p>Following</p>
+                <h2><?php echo $followingCount; ?></h2>
+              </div>
+            </div>
+          </div>
+
+        </div>
     </div>
-
-    <div class="profile-stats">
-      <div class="stat-item">
-        <p>Followers</p>
-        <h2><?php echo $followerCount; ?></h2>
-      </div>
-      <div class="stat-item">
-        <p>Following</p>
-        <h2><?php echo $followingCount; ?></h2>
-      </div>
-    </div>
-  </div>
-
 </div>
+
 </body>
 </html>

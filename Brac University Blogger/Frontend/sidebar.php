@@ -1,6 +1,14 @@
 <?php
 $page = basename($_SERVER['PHP_SELF']);
 ?>
+<!-- Mobile Menu Button -->
+<div class="mobile-menu-btn">
+    <i class='bx bx-menu'></i>
+</div>
+
+<!-- Overlay -->
+<div class="sidebar-overlay"></div>
+
 <div class="sidebar">
     <ul class="sidebar-menu">
         <li>
@@ -48,3 +56,23 @@ $page = basename($_SERVER['PHP_SELF']);
             </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+        
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    }
+});
+</script>

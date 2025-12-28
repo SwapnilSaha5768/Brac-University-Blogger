@@ -6,6 +6,12 @@
     
     require_once "database.php";
     $msg = "";
+
+    // Check and update database schema for replies
+    $checkCol = $conn->query("SHOW COLUMNS FROM comments LIKE 'parent_id'");
+    if($checkCol->num_rows == 0) {
+        $conn->query("ALTER TABLE comments ADD COLUMN parent_id INT DEFAULT NULL");
+    }
     
     // Handle Quick Post
     if (isset($_POST['quick_publish'])) {
@@ -38,6 +44,7 @@
         post_id INT NOT NULL,
         user_id INT NOT NULL,
         comment TEXT NOT NULL,
+        parent_id INT DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -47,6 +54,7 @@
     if (isset($_POST['submit_comment'])) {
         $comment_content = $_POST['comment_content'] ?? "";
         $post_id = $_POST['post_id'] ?? "";
+        $parent_id = !empty($_POST['parent_id']) ? $_POST['parent_id'] : NULL;
         
         if (!empty(trim($comment_content)) && !empty($post_id)) {
             $follower = $_SESSION["username"];
@@ -54,13 +62,12 @@
             $results = $conn->query($checkUserQue);
             $userID = $results->fetch_assoc()['id'];
             
-            $sql = "INSERT INTO comments (post_id, user_id, comment) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO comments (post_id, user_id, comment, parent_id) VALUES (?, ?, ?, ?)";
             $stmt = mysqli_stmt_init($conn);
             $prepareStmt = mysqli_stmt_prepare($stmt, $sql);
             if ($prepareStmt) {
-                mysqli_stmt_bind_param($stmt, "iis", $post_id, $userID, $comment_content);
+                mysqli_stmt_bind_param($stmt, "iisi", $post_id, $userID, $comment_content, $parent_id);
                 mysqli_stmt_execute($stmt);
-                // Redirect to avoid resubmission
                 header("Location: index.php"); 
                 die();
             }
@@ -139,8 +146,8 @@
             // Content
             echo "<div class='post-content'>";
             echo "<h5>" . htmlspecialchars($row['title']) . "</h5>";
-            echo "<span class='category'>" . htmlspecialchars($row['category']) . "</span>";
             echo "<p>" . nl2br(htmlspecialchars($row['description'])) . "</p>";
+            echo "<span class='category'>" . htmlspecialchars($row['category']) . "</span>";
             echo "</div>";
 
             // Actions
@@ -149,11 +156,11 @@
             echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
 
             echo "<button type='submit' name='reaction' value='like' class='action-btn'>";
-            echo "<i class='bx bx-like'></i> Like ($likeCount)";
+            echo "<i class='bx bx-like'></i> ($likeCount)";
             echo "</button>";
 
             echo "<button type='submit' name='reaction' value='dislike' class='action-btn'>";
-            echo "<i class='bx bx-dislike'></i> Dislike ($dislikeCount)";
+            echo "<i class='bx bx-dislike'></i> ($dislikeCount)";
             echo "</button>";
 
             echo "</form>";
@@ -175,18 +182,52 @@
             echo "<div class='comment-list'>";
             $commentSql = "SELECT comments.*, users.fullname, users.username FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $blogId ORDER BY created_at ASC";
             $commentResult = mysqli_query($conn, $commentSql);
+            
+            $allComments = [];
             if (mysqli_num_rows($commentResult) > 0) {
-                while ($comment = mysqli_fetch_assoc($commentResult)) {
-                    $cName = htmlspecialchars($comment['fullname']);
-                    $cUser = htmlspecialchars($comment['username']);
-                    $cBody = htmlspecialchars($comment['comment']);
-                    
-                    echo "<div class='comment-item'>";
-                    echo "<strong>$cName</strong> ($cUser)";
-                    echo "<span> $cBody </span>";
-                    echo "</div>";
+                while ($c = mysqli_fetch_assoc($commentResult)) {
+                    $allComments[] = $c;
                 }
             }
+
+            // Function to render a single comment item
+            function renderCommentItem($comment, $isReply = false) {
+                $cName = htmlspecialchars($comment['fullname']);
+                $cBody = htmlspecialchars($comment['comment']);
+                $cId = $comment['id'];
+                $styleClass = $isReply ? 'comment-item nested-reply' : 'comment-item';
+                
+                echo "<div class='$styleClass'>";
+                echo "<strong>$cName</strong> <span> $cBody </span>";
+                
+                if (!$isReply) { // Only allow 1 level of nesting for simplicity
+                     echo "<span class='reply-link' onclick='toggleReply($cId)'>Reply</span>";
+                     // Hidden Reply Form
+                     echo "<form id='reply-form-$cId' action='index.php' method='post' style='display:none; margin-top:10px;'>";
+                     echo "<input type='hidden' name='post_id' value='".$comment['post_id']."'>";
+                     echo "<input type='hidden' name='parent_id' value='$cId'>";
+                     echo "<div class='comment-box' style='margin-bottom:0;'>";
+                     echo "<input type='text' name='comment_content' placeholder='Write a reply...' required>";
+                     echo "<button type='submit' name='submit_comment'><i class='bx bx-send'></i></button>";
+                     echo "</div>";
+                     echo "</form>";
+                }
+                echo "</div>";
+            }
+
+            // Filter parent comments
+            foreach ($allComments as $comment) {
+                if (empty($comment['parent_id'])) {
+                    renderCommentItem($comment);
+                    // Find and render replies
+                    foreach ($allComments as $reply) {
+                        if ($reply['parent_id'] == $comment['id']) {
+                            renderCommentItem($reply, true);
+                        }
+                    }
+                }
+            }
+            
             echo "</div>"; // End List
             
             echo "</div>"; // End Comment Section
@@ -214,8 +255,52 @@
                 </form>
             </div>
             
-            <div class="calendar-widget">
-                <iframe src="https://www.bracu.ac.bd/sites/default/files/uploads/2025/10/21/Year%20Planner%202025-Version-Final-summer25v2.jpg" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+<script>
+function toggleReply(id) {
+    var form = document.getElementById('reply-form-' + id);
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+</script>
+
+            <!-- Who to Follow Widget -->
+            <div class="post-card" style="padding: 20px;">
+                <h5 style="margin-bottom: 20px; font-weight: 700; color: var(--text-color);">Who to Follow</h5>
+                <div class="follow-list">
+                    <?php
+                    // Get list of users NOT followed by current user
+                    $me = $userRow['id'];
+                    $followSql = "SELECT * FROM users 
+                                  WHERE id != $me 
+                                  AND id NOT IN (SELECT following_id FROM follows WHERE follower_id = $me) 
+                                  ORDER BY RAND() LIMIT 3";
+                    $followResult = mysqli_query($conn, $followSql);
+
+                    if (mysqli_num_rows($followResult) > 0) {
+                        while ($fRow = mysqli_fetch_assoc($followResult)) {
+                            // Using standard profile pic if none exists (simplified logic)
+                            // Assuming all have a reachable profile pic or default
+                            ?>
+                            <div class="follow-item" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="uploads/default.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                    <div>
+                                        <h6 style="margin: 0; font-size: 0.95rem; font-weight: 600;"><?php echo htmlspecialchars($fRow['fullname']); ?></h6>
+                                        <small style="color: var(--text-light); font-size: 0.8rem;">@<?php echo htmlspecialchars($fRow['username']); ?></small>
+                                    </div>
+                                </div>
+                                <a href="friend-profile.php?user_id=<?php echo $fRow['id']; ?>" class="btn-sm" style="border: 1px solid var(--primary-color); color: var(--primary-color); border-radius: 20px; padding: 5px 15px; font-size: 0.8rem; font-weight: 600;">View</a>
+                            </div>
+                            <?php
+                        }
+                    } else {
+                        echo "<p style='color: var(--text-light); font-size: 0.9rem;'>No new suggestions.</p>";
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>    
