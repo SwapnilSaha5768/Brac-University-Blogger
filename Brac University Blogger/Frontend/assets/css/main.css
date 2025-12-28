@@ -37,6 +37,7 @@ a {
 
 ul {
     list-style: none;
+    padding: 0;
 }
 
 /* =========================================
@@ -145,7 +146,7 @@ ul {
 .sidebar-menu li a {
     display: flex;
     align-items: center;
-    padding: 15px 25px;
+    padding: 15px 40px;
     color: #bbb;
     font-size: 1rem;
     border-left: 3px solid transparent;
@@ -448,39 +449,48 @@ ul {
 .profile-card {
     background: var(--card-bg);
     width: 350px;
-    /* Fixed width for sidebar */
     flex-shrink: 0;
-    /* Prevent shrinking */
-    padding: 50px 30px;
     border-radius: 20px;
     text-align: center;
     box-shadow: var(--shadow);
+    overflow: hidden;
+    padding-bottom: 30px;
     position: relative;
-    margin-top: 50px;
+    /* margin-top managed by container alignment */
+}
+
+.profile-header-banner {
+    height: 120px;
+    background: linear-gradient(135deg, #4e5bf2, #8e44ad);
+    width: 100%;
 }
 
 .profile-card img.profile-pic {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    border: 6px solid white;
+    border: 5px solid white;
     object-fit: cover;
-    margin-top: -120px;
-    /* Pull it up */
+    margin-top: -60px;
+    /* Overlap the banner */
     background: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile-card h1 {
     margin-top: 15px;
     color: var(--text-color);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 0 20px;
 }
 
 .profile-card h4 {
     color: var(--text-light);
     font-weight: 400;
     margin-bottom: 20px;
+    font-size: 0.95rem;
+    padding: 0 20px;
 }
 
 .profile-stats {
@@ -531,7 +541,49 @@ ul {
 }
 
 .alert-success {
-    background: #eaffea;
     color: var(--success-color);
     border: 1px solid #d1ffd1;
+}
+
+/* =========================================
+   Identity Selection (Registration)
+   ========================================= */
+.identity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.identity-option {
+    cursor: pointer;
+}
+
+.identity-option input {
+    display: none;
+}
+
+.identity-card {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-light);
+    background: #f9f9f9;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.identity-option:hover .identity-card {
+    border-color: #bbb;
+    background: #fff;
+}
+
+/* Checked State */
+.identity-option input:checked+.identity-card {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 8px 15px rgba(78, 91, 242, 0.25);
+    transform: translateY(-2px);
 }

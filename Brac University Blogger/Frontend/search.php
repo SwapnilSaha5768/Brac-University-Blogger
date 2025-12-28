@@ -14,7 +14,7 @@ if (isset($_POST["submit"])) {
 
         $_SESSION['susername'] = $search_username;
         $_SESSION["user1"] = "yes";
-        header("Location: friend-profile.php?user_id=" . $user_profile['user_id']);
+        header("Location: friend-profile.php?user_id=" . $user_profile['id']);
         die();
     } else {
         $errorMsg = "User not found";

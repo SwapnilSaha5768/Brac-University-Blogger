@@ -85,7 +85,7 @@ if (isset($_SESSION["user"])) {
                 
                 <!-- Step 1: Personal Details -->
                 <div id="step-1">
-                    <h5 class="mb-3">Personal Details</h5>
+                    <h5 class="mb-6">Personal Details</h5>
                     <div class="form-group">
                         <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Full Name:" required>
                     </div>
@@ -97,15 +97,24 @@ if (isset($_SESSION["user"])) {
                         <input type="date" class="form-control" name="dob" id="dob" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" style="display:block; margin-bottom:5px;">Identity</label>
-                        <div>
-                            <label for="Student" class="ratio-inline"><input type="radio" name="iden" value="S" id="Student" required> Student</label>
-                            <label class="mx-2"></label>
-                            <label for="Faculty" class="ratio-inline"><input type="radio" name="iden" value="F" id="Faculty"> Faculty</label>
-                            <label class="mx-2"></label>
-                            <label for="Alumni" class="ratio-inline"><input type="radio" name="iden" value="A" id="Alumni"> Alumni</label>
-                            <label class="mx-2"></label>
-                            <label for="Outsiders" class="ratio-inline"><input type="radio" name="iden" value="O" id="Outsiders"> Outsider</label>
+                        <label class="form-label">Identity</label>
+                        <div class="identity-grid">
+                            <label class="identity-option">
+                                <input type="radio" name="iden" value="S" required>
+                                <div class="identity-card">Student</div>
+                            </label>
+                            <label class="identity-option">
+                                <input type="radio" name="iden" value="F">
+                                <div class="identity-card">Faculty</div>
+                            </label>
+                            <label class="identity-option">
+                                <input type="radio" name="iden" value="A">
+                                <div class="identity-card">Alumni</div>
+                            </label>
+                            <label class="identity-option">
+                                <input type="radio" name="iden" value="O">
+                                <div class="identity-card">Outsider</div>
+                            </label>
                         </div>
                     </div>
                     <div class="form-btn text-end">
@@ -115,7 +124,7 @@ if (isset($_SESSION["user"])) {
 
                 <!-- Step 2: Account Details -->
                 <div id="step-2" style="display:none;">
-                    <h5 class="mb-3">Account Details</h5>
+                    <h5 class="mb-6">Account Details</h5>
                     <div class="form-group">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email:" required>
                     </div>

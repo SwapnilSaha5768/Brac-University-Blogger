@@ -7,20 +7,22 @@ if (isset($_SESSION["user"])) {
 
 $errorMsg = "";
 if (isset($_POST["login"])) {
-    $username = $_POST["username"] ?? "";
-    $fullname = $_POST["fullname"] ?? "";
+    $input_login = $_POST["username"] ?? ""; // Accepts username or email
     $password = $_POST["password"] ?? "";
     
     require_once "database.php";
-    $sql = "SELECT * FROM users WHERE username = '$username' && fullname = '$fullname'";
+    // Sanitize input
+    $input_login = mysqli_real_escape_string($conn, $input_login);
+    
+    $sql = "SELECT * FROM users WHERE username = '$input_login' OR email = '$input_login'";
     $result = mysqli_query($conn, $sql);
     $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
     
     if ($user) {
         if (password_verify($password, $user["password"])) {
              // Session is already started at the top
-            $_SESSION['username'] = $username;
-            $_SESSION['fullname'] = $fullname;
+            $_SESSION['username'] = $user['username']; // Set from DB
+            $_SESSION['fullname'] = $user['fullname']; // Set from DB
             $_SESSION["user"] = "yes";
             header("Location: index.php");
             die();
@@ -28,7 +30,7 @@ if (isset($_POST["login"])) {
             $errorMsg = "<div class='alert alert-danger'>Password does not match</div>";
         }
     } else {
-        $errorMsg = "<div class='alert alert-danger'>User Name and FullName does not match</div>";
+        $errorMsg = "<div class='alert alert-danger'>User not found</div>";
     }
 }
 ?>
@@ -58,13 +60,10 @@ if (isset($_POST["login"])) {
             ?>
         <form action="login.php" method="post">
             <div class="form-group">
-                <input type="text" placeholder="Enter User Name:" name="username" class="form-control">
+                <input type="text" placeholder="Enter Username or Email:" name="username" class="form-control" required>
             </div>
             <div class="form-group">
-                <input type="text" placeholder="Enter Full Name:" name="fullname" class="form-control">
-            </div>
-            <div class="form-group">
-                <input type="password" placeholder="Enter Password:" name="password" class="form-control">
+                <input type="password" placeholder="Enter Password:" name="password" class="form-control" required>
             </div>
             <div class="form-btn">
                 <input type="submit" value="Login" name="login" class="btn btn-primary">
