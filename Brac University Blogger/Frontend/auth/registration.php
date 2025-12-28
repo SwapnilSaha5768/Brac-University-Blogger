@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: index.php");
+   header("Location: ../index.php");
+
 }
 ?>
 <!DOCTYPE html>
@@ -12,7 +13,8 @@ if (isset($_SESSION["user"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+
 </head>
 <body>
     <div class="auth-body">
@@ -48,14 +50,16 @@ if (isset($_SESSION["user"])) {
             if ($password!==$passwordRepeat) {
                 array_push($errors,"Password does not match");
             }
-            require_once "database.php";
+            require_once "../includes/database.php";
+
             $sql = "SELECT * FROM users WHERE email = '$email'";
             $result = mysqli_query($conn, $sql);
             $rowCount = mysqli_num_rows($result);
             if ($rowCount>0) {
                 array_push($errors,"Email already exists!");
             }
-            require_once "database.php";
+            require_once "../includes/database.php";
+
             $sql = "SELECT * FROM users WHERE username = '$username'";
             $result = mysqli_query($conn, $sql);
             $rowCount = mysqli_num_rows($result);

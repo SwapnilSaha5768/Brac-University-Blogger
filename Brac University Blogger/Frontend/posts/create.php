@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
+
 }
 ?>
 
@@ -14,16 +15,22 @@ if (!isset($_SESSION["user"])) {
     <title>Create Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+
 </head>
 
 <body>
 <div class="dashboard-container">
-    <?php include 'sidebar.php'; ?>
+    <?php 
+    $basePath = "../";
+    include '../includes/sidebar.php'; 
+    ?>
+
     
     <div class="main-content">
         <div class="options-bar">
-            <a href="explore.php">Explore</a>
+            <a href="../explore.php">Explore</a>
+
             <a href="#">Interest</a>
         </div>
 
@@ -37,7 +44,8 @@ if (!isset($_SESSION["user"])) {
                 $description = $_POST["description"] ?? "";
                 $category = $_POST["category"] ?? "";
                 $errors = array();
-                require_once "database.php";
+                require_once "../includes/database.php";
+
 
                 $follower = $_SESSION["username"];
                 $checkUserQue = "SELECT id FROM users WHERE username = '$follower'";
@@ -50,7 +58,8 @@ if (!isset($_SESSION["user"])) {
                 if ($prepareStmt) {
                     mysqli_stmt_bind_param($stmt,"isss", $userID, $title, $description, $category);
                     mysqli_stmt_execute($stmt);
-                    echo "<div class='alert alert-success'>You have added successfully. <a href='index.php'>View Post</a></div>";
+                    echo "<div class='alert alert-success'>You have added successfully. <a href='../index.php'>View Post</a></div>";
+
                 }else{
                     die("Something went wrong");
                 }
@@ -81,7 +90,8 @@ if (!isset($_SESSION["user"])) {
                 <input type="submit" value="Create Post" name="publish" class="btn-primary">
             </div>
             <div class="text-center mt-4">
-                <a href="index.php" style="color:var(--primary-color);">Cancel</a>
+                <a href="../index.php" style="color:var(--primary-color);">Cancel</a>
+
             </div>
           </form>
         </div>

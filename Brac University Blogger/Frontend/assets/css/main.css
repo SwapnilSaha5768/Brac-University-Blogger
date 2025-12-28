@@ -57,7 +57,6 @@ ul {
     padding: 40px;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    margin: 20px;
 }
 
 .auth-header {
@@ -135,12 +134,24 @@ ul {
     width: 250px;
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
-    padding-top: 20px;
+    padding-top: 0;
     z-index: 1000;
 }
 
+.sidebar-header {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.sidebar-header h3 {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
 .sidebar-menu {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .sidebar-menu li a {

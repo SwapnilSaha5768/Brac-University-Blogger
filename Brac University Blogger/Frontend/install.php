@@ -2,7 +2,8 @@
 // This script runs the setup SQL to create tables in the connected database.
 // Usage: Deploy this file, then visit https://your-app.onrender.com/install.php
 
-require_once "database.php";
+require_once "includes/database.php";
+
 
 $sql = "
 CREATE TABLE IF NOT EXISTS users (

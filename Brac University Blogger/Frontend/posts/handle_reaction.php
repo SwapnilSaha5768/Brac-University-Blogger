@@ -1,12 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-   header("Location: login.php");
+   header("Location: ../auth/login.php");
+
    die();
 }
 
 $username = $_SESSION["username"];
-require_once "database.php";
+require_once "../includes/database.php";
+
 $checkUserQue = "SELECT id FROM users WHERE username = '$username'";
 $results = $conn->query($checkUserQue);
 $uid = $results->fetch_assoc()['id'];
@@ -26,7 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Dynamic Redirect
-    $redirect = $_POST['redirect'] ?? 'index.php';
+    $redirect = $_POST['redirect'] ?? '../index.php';
+
     header("Location: $redirect");
     exit();
 }

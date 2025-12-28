@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once "database.php";
+require_once "../includes/database.php";
+
 
 if (!isset($_SESSION["user"]) || !isset($_POST['comment_id'])) {
-    header("Location: index.php");
+    header("Location: ../index.php");
+
     die();
 }
 
@@ -43,7 +45,8 @@ if ($row = $result->fetch_assoc()) {
 if(isset($_SERVER['HTTP_REFERER'])) {
     header("Location: " . $_SERVER['HTTP_REFERER']);
 } else {
-    header("Location: index.php");
+    header("Location: ../index.php");
+
 }
 die();
 ?>

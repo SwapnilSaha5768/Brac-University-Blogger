@@ -1,9 +1,11 @@
 <?php
     session_start();
-    require_once "database.php";
+    require_once "includes/database.php";
+
 
     if (!isset($_SESSION["user"])) {
-        header("Location: login.php");
+        header("Location: auth/login.php");
+
         die();
     }
     
@@ -44,7 +46,11 @@
 <body>
 <div class="dashboard-container">
         <!-- Sidebar -->
-        <?php include 'sidebar.php'; ?>            
+        <?php 
+        $basePath = "";
+        include 'includes/sidebar.php'; 
+        ?>            
+
         
         <!-- Main Content -->
         <div class="main-content">
@@ -82,8 +88,10 @@
             // Edit/Delete Options for Owner
             if ($_SESSION['username'] === $row['username']) {
                 echo "<div class='post-options' style='display:flex; gap:10px;'>";
-                echo "<a href='edit_post.php?id=$blogId' class='btn-sm btn-outline-primary' style='border:1px solid #ddd; padding:5px 10px; border-radius:5px; font-size:0.8rem;'><i class='bx bx-edit'></i> Edit</a>";
-                echo "<form action='delete_post.php' method='POST' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this post?\");'>";
+                echo "<a href='posts/edit_post.php?id=$blogId' class='btn-sm btn-outline-primary' style='border:1px solid #ddd; padding:5px 10px; border-radius:5px; font-size:0.8rem;'><i class='bx bx-edit'></i> Edit</a>";
+
+                echo "<form action='posts/delete_post.php' method='POST' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this post?\");'>";
+
                 echo "<input type='hidden' name='id' value='$blogId'>";
                 echo "<button type='submit' class='btn-sm btn-outline-danger' style='border:1px solid #ddd; background:none; color:var(--danger-color); padding:5px 10px; border-radius:5px; font-size:0.8rem; cursor:pointer;'><i class='bx bx-trash'></i> Delete</button>";
                 echo "</form>";
@@ -100,9 +108,11 @@
 
             // Actions
             echo "<div class='post-actions'>";
-            echo "<form method='Post' action='handle_reaction.php' style='display:flex; gap:10px;'>";
+            echo "<form method='Post' action='posts/handle_reaction.php' style='display:flex; gap:10px;'>";
+
             echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
-            echo "<input type='hidden' name='redirect' value='explore.php'>"; // Add redirect hint if needed logic in handle_reaction supports it, or it defaults to referer
+            echo "<input type='hidden' name='redirect' value='../explore.php'>"; // Add redirect hint if needed logic in handle_reaction supports it, or it defaults to referer
+
             echo "<button type='submit' name='reaction' value='like' class='action-btn'><i class='bx bx-like'></i> Like ($likeCount)</button>";
             echo "<button type='submit' name='reaction' value='dislike' class='action-btn'><i class='bx bx-dislike'></i> Dislike ($dislikeCount)</button>";
             echo "</form>";

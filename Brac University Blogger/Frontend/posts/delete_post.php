@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once "database.php";
+require_once "../includes/database.php";
+
 
 if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
+
     exit();
 }
 
@@ -35,7 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
                     mysqli_stmt_execute($stmt);
                     
                     // Redirect back to the previous page (index or profile)
-                    $previousPage = $_SERVER['HTTP_REFERER'] ?? 'index.php';
+                    $previousPage = $_SERVER['HTTP_REFERER'] ?? '../index.php';
+
                     header("Location: $previousPage");
                     exit();
                 } else {
@@ -47,7 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
         }
     }
 } else {
-    header("Location: index.php");
+    header("Location: ../index.php");
+
     exit();
 }
 ?>

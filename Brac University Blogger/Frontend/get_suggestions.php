@@ -1,5 +1,6 @@
 <?php
-require_once "database.php";
+require_once "includes/database.php";
+
 
 if (isset($_POST['query'])) {
     $searchText = $_POST['query'];

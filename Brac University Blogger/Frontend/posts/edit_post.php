@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once "database.php";
+require_once "../includes/database.php";
+
 
 if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
+
     exit();
 }
 
@@ -12,7 +14,8 @@ $errorMsg = "";
 $successMsg = "";
 
 if (!$postId) {
-    header("Location: index.php");
+    header("Location: ../index.php");
+
     exit();
 }
 
@@ -68,7 +71,8 @@ if (isset($_POST["update"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Post</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+
 </head>
 
 <body>
@@ -79,7 +83,8 @@ if (isset($_POST["update"])) {
         </div>
         
         <?php if ($successMsg): ?>
-            <div class='alert alert-success'><?php echo $successMsg; ?> <a href='index.php'>Go Home</a></div>
+            <div class='alert alert-success'><?php echo $successMsg; ?> <a href='../index.php'>Go Home</a></div>
+
         <?php endif; ?>
         
         <?php if ($errorMsg): ?>
@@ -112,7 +117,8 @@ if (isset($_POST["update"])) {
             <input type="submit" value="Update Post" name="update" class="btn-primary">
         </div>
         <div class="text-center mt-4">
-            <a href="index.php" style="color:var(--primary-color);">Cancel</a>
+            <a href="../index.php" style="color:var(--primary-color);">Cancel</a>
+
         </div>
       </form>
     </div>

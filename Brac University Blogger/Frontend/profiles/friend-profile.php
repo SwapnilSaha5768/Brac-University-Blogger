@@ -1,10 +1,12 @@
 <?php
     session_start();
-    require_once "database.php";
+    require_once "../includes/database.php";
+
     $mysqli = $conn;
 
     if (!isset($_SESSION["user"])) {
-        header("Location: login.php");
+        header("Location: ../auth/login.php");
+
         die();
     }
 
@@ -30,7 +32,8 @@
         $queryUser = "SELECT * FROM users WHERE username = '$username'";
     } else {
         // Fallback or error
-        header("Location: search.php");
+        header("Location: ../search.php");
+
         die();
     }
 
@@ -103,7 +106,8 @@
     <title><?php echo htmlspecialchars($fullname); ?>'s Profile</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+
     
     <script>
     function toggleReply(id) {
@@ -120,7 +124,11 @@
 
 <div class="dashboard-container">
     <!-- Sidebar -->
-    <?php include 'sidebar.php'; ?>
+    <?php 
+    $basePath = "../";
+    include '../includes/sidebar.php'; 
+    ?>
+
 
     <!-- Main Content -->
     <div class="main-content">
@@ -165,9 +173,11 @@
 
                       // Actions
                       echo "<div class='post-actions'>";
-                      echo "<form method='Post' action='handle_reaction.php' style='display:flex; gap:10px;'>";
+                      echo "<form method='Post' action='../posts/handle_reaction.php' style='display:flex; gap:10px;'>";
+
                       echo "<input type='hidden' name='blog_id' value=" . $row['id'] . ">";
-                      echo "<input type='hidden' name='redirect' value='friend-profile.php?user_id=$userId'>";
+                      echo "<input type='hidden' name='redirect' value='../profiles/friend-profile.php?user_id=$userId'>";
+
                       echo "<button type='submit' name='reaction' value='like' class='action-btn'><i class='bx bx-like'></i> ($likeCount)</button>";
                       echo "<button type='submit' name='reaction' value='dislike' class='action-btn'><i class='bx bx-dislike'></i> ($dislikeCount)</button>";
                       echo "</form>";
@@ -204,7 +214,8 @@
                                   
                                   // Delete Button
                                   if ($current_user_id == $comment['user_id'] || $current_user_id == $row['user_id']) {
-                                      echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                      echo "<form action='../posts/delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+
                                       echo "<input type='hidden' name='comment_id' value='$cId'>";
                                       echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
                                       echo "</form>";
@@ -224,7 +235,8 @@
                                           
                                           // Delete Button
                                           if ($current_user_id == $reply['user_id'] || $current_user_id == $row['user_id']) {
-                                              echo "<form action='delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+                                              echo "<form action='../posts/delete_comment.php' method='POST' style='display:inline; position:absolute; top:8px; right:8px;' onsubmit='return confirm(\"Delete this comment?\");'>";
+
                                               echo "<input type='hidden' name='comment_id' value='$rId'>";
                                               echo "<button type='submit' style='border:none; background:none; color:#ff6b6b; cursor:pointer; font-size:1.1rem;' title='Delete Comment'><i class='bx bx-trash'></i></button>";
                                               echo "</form>";

@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (isset($_POST["submit"])) {
-    require_once "database.php";
+    require_once "includes/database.php";
+
 	$search_username = $_POST["search"] ?? "";
 
     $search_username = mysqli_real_escape_string($conn, $search_username);
@@ -14,7 +15,8 @@ if (isset($_POST["submit"])) {
 
         $_SESSION['susername'] = $search_username;
         $_SESSION["user1"] = "yes";
-        header("Location: friend-profile.php?user_id=" . $user_profile['id']);
+        header("Location: profiles/friend-profile.php?user_id=" . $user_profile['id']);
+
         die();
     } else {
         $errorMsg = "User not found";
@@ -38,7 +40,11 @@ if (isset($_POST["submit"])) {
 
 <div class="dashboard-container">
     <!-- Sidebar -->
-    <?php include 'sidebar.php'; ?>            
+    <?php 
+    $basePath = "";
+    include 'includes/sidebar.php'; 
+    ?>            
+
     
     <!-- Main Content -->
     <div class="main-content">
@@ -102,7 +108,8 @@ if (isset($_POST["submit"])) {
                     });
 
                     function selectUser(id) {
-                        window.location.href = "friend-profile.php?user_id=" + id;
+                        window.location.href = "profiles/friend-profile.php?user_id=" + id;
+
                     }
                 </script>
                 <div class="form-group">
