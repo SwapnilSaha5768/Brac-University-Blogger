@@ -67,7 +67,7 @@ if (isset($_SESSION["user"])) {
             $stmt = mysqli_stmt_init($conn);
             $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
             if ($prepareStmt) {
-                mysqli_stmt_bind_param($stmt,"sssdss",$fullName, $username, $iden, $dateofbirth, $email, $passwordHash);
+                mysqli_stmt_bind_param($stmt,"ssssss",$fullName, $username, $iden, $dateofbirth, $email, $passwordHash);
                 mysqli_stmt_execute($stmt);
                 echo "<div class='alert alert-success'>You are registered successfully.</div>";
             }else{
