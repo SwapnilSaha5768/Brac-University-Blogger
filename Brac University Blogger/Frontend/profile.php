@@ -55,12 +55,9 @@ if ($userRow) {
 
     <!-- Main Content -->
     <div class="main-content">
-        
-        <!-- Profile Layout -->
-        <div class="profile-page-container" style="padding: 0; margin: 0; max-width: 100%;">
             
             <!-- Left Column: User's Posts -->
-            <div class="profile-posts">
+            <div class="profile-posts" style="width: 100%; max-width: none;">
                 <div class="options-bar">
                     <a href="profile.php" class="active">My Posts</a>
                     <a href="#">Archived</a>
@@ -151,37 +148,38 @@ if ($userRow) {
                 }
                 ?>
             </div>
-
-            <!-- Right Column: Profile Card -->
-            <div class="profile-card">
-              <div class="profile-header-banner"></div>
-              <img src="uploads/default.png" class="profile-pic">
-              <h1>
-                  <?php
-                      echo $_SESSION["fullname"];
-                  ?>
-              </h1>
-              <h4>
-                  <?php
-                      echo "@".$_SESSION["username"];
-                  ?>
-              </h4>
-
-              <div class="profile-stats">
-                <div class="stat-item">
-                  <p>Followers</p>
-                  <h2><?php echo $followerCount; ?></h2>
-                </div>
-                <div class="stat-item">
-                  <p>Following</p>
-                  <h2><?php echo $followingCount; ?></h2>
-                </div>
-              </div>
-            </div>
-
-        </div>
     </div>
-</div>
+
+    <!-- Right Sidebar (Profile Card) -->
+    <div class="right-sidebar profile-sidebar">
+             <div class="profile-card" style="width: 100%; box-shadow: none; border: none; background: transparent;">
+               <div class="profile-header-banner" style="border-radius: 12px 12px 0 0;"></div>
+               <div style="position: relative;">
+                   <img src="uploads/default.png" class="profile-pic" style="margin-top: -50px;">
+               </div>
+               <h1 style="margin-top: 10px; font-size: 1.3rem;">
+                   <?php
+                       echo $_SESSION["fullname"];
+                   ?>
+               </h1>
+               <h4 style="font-size: 0.9rem;">
+                   <?php
+                       echo "@".$_SESSION["username"];
+                   ?>
+               </h4>
+
+               <div class="profile-stats" style="margin-top: 20px; padding-top: 20px;">
+                 <div class="stat-item">
+                   <p>Followers</p>
+                   <h2><?php echo $followerCount; ?></h2>
+                 </div>
+                 <div class="stat-item">
+                   <p>Following</p>
+                   <h2><?php echo $followingCount; ?></h2>
+                 </div>
+               </div>
+             </div>
+    </div>
 
 </body>
 </html>

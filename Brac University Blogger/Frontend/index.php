@@ -272,7 +272,9 @@ function toggleReply(id) {
                 <div class="follow-list">
                     <?php
                     // Get list of users NOT followed by current user
-                    $me = $userRow['id'];
+                    $follower = $_SESSION["username"];
+                    $uRes = $conn->query("SELECT id FROM users WHERE username='$follower'");
+                    $me = $uRes->fetch_assoc()['id'];
                     $followSql = "SELECT * FROM users 
                                   WHERE id != $me 
                                   AND id NOT IN (SELECT following_id FROM follows WHERE follower_id = $me) 

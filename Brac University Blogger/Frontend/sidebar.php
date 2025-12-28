@@ -47,7 +47,6 @@ $page = basename($_SERVER['PHP_SELF']);
             <img src="uploads/default.png" class="profile-pic-small">
             <div>
             <?php
-            // Only echo if session vars exist, though usually this file is included where session is active
             if(isset($_SESSION["fullname"])) {
                 echo "<strong>" . $_SESSION["fullname"] . "</strong><br>";
                 echo "<small>@" . $_SESSION["username"] . "</small>";

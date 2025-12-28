@@ -124,11 +124,9 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
-        <div class="profile-page-container" style="padding: 0; margin: 0; max-width: 100%;">
           
           <!-- Left Column: User's Posts -->
-          <div class="profile-posts">
+          <div class="profile-posts" style="width: 100%; max-width: none;">
               
               <div class="options-bar">
                   <span class="active">Posts</span>
@@ -228,28 +226,31 @@
               }
               ?>
           </div>
-
-          <!-- Right Column: Profile Card -->
-          <div class="profile-card">
-            <div class="profile-header-banner"></div>
+    </div>
+    
+    <!-- Right Sidebar (Profile Card) -->
+    <div class="right-sidebar profile-sidebar">
+          <div class="profile-card" style="width: 100%; box-shadow: none; border: none; background: transparent;">
+            <div class="profile-header-banner" style="border-radius: 12px 12px 0 0;"></div>
             <div style="position: relative;">
-                <img src="uploads/default.png" class="profile-pic">
+                <img src="uploads/default.png" class="profile-pic" style="margin-top: -50px;">
             </div>
             
-            <h1 style="margin-top: 10px;"><?php echo htmlspecialchars($fullname); ?></h1>
-            <h4><?php echo "@" . htmlspecialchars($username); ?></h4>
+            <h1 style="margin-top: 10px; font-size: 1.3rem;"><?php echo htmlspecialchars($fullname); ?></h1>
+            <h4 style="font-size: 0.9rem;"><?php echo "@" . htmlspecialchars($username); ?></h4>
 
             <!-- Follow / Unfollow Button -->
             <?php if ($userId != $current_user_id): ?>
-                <form method="post" style="margin-top: 20px;">
+                <form method="post" style="margin-top: 15px;">
                     <button type="submit" name="toggle_follow" class="follow-btn" style="
                         background: <?php echo $isFollowing ? '#fff' : 'var(--primary-color)'; ?>; 
                         color: <?php echo $isFollowing ? 'var(--primary-color)' : '#fff'; ?>; 
                         border: 1px solid var(--primary-color);
-                        padding: 8px 25px;
+                        padding: 6px 20px;
                         border-radius: 20px;
                         font-weight: 600;
                         cursor: pointer;
+                        font-size: 0.9rem;
                         transition: all 0.3s ease;
                     ">
                         <?php echo $isFollowing ? "Unfollow" : "Follow"; ?>
@@ -257,7 +258,7 @@
                 </form>
             <?php endif; ?>
 
-            <div class="profile-stats">
+            <div class="profile-stats" style="margin-top: 20px; padding-top: 20px;">
               <div class="stat-item">
                 <p>Followers</p>
                 <h2><?php echo $followerCount; ?></h2>
@@ -268,8 +269,6 @@
               </div>
             </div>
           </div>
-
-        </div>
     </div>
 </div>
 
