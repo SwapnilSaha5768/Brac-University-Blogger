@@ -44,57 +44,13 @@
 <body>
 <div class="dashboard-container">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <ul class="sidebar-menu">
-                <li>
-                    <a href="index.php">
-                        <i class="bx bx-home"></i>
-                        <span class="nav-item">Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="profile.php">
-                        <i class="bx bxs-face-mask"></i>
-                        <span class="nav-item">Profile</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="search.php">
-                        <i class="bx bx-search"></i>
-                        <span class="nav-item">Search</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="create.php">
-                        <i class="bx bx-pencil"></i>
-                        <span class="nav-item">Write Post</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="logout.php">
-                        <i class="bx bx-log-out"></i>
-                        <span class="nav-item">Sign Out</span>
-                    </a>
-                </li>
-            </ul>
-            
-            <div class="user-info">
-                 <img src="uploads/default.png" class="profile-pic-small">
-                 <div>
-                    <?php
-                    echo "<strong>" . $_SESSION["fullname"] . "</strong><br>";
-                    echo "<small>@" . $_SESSION["username"] . "</small>";
-                    ?>
-                 </div>
-            </div>
-        </div>            
+        <?php include 'sidebar.php'; ?>            
         
         <!-- Main Content -->
         <div class="main-content">
             <div class="options-bar">
                 <a href="explore.php" class="active">Explore</a>
                 <a href="#">Interest</a>
-                <a href="follow.php">Follow</a>
             </div>
             
             <div class="posts-list">
@@ -192,11 +148,11 @@
         </div>
         
         <!-- Right Sidebar -->
-        <div class="right-sidebar">
+        <!-- <div class="right-sidebar">
              <div class="calendar-widget">
                 <iframe src="https://www.bracu.ac.bd/sites/default/files/academics/Year-planner/yp23.png" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
             </div>
-        </div>
+        </div> -->
     </div>    
 </body>
 </html>

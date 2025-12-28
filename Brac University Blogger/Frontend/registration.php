@@ -81,47 +81,84 @@ if (isset($_SESSION["user"])) {
             }
             }
             ?>
-            <form action="registration.php" method="post">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="fullname" placeholder="Full Name:">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="username" placeholder="User Name:">
-                </div>
-                <div class="form-group">
-                    <p> <h5> Date Of Birth </h5> </p>
-                    <input type="date" class="form-control" name="dob">
-                </div>
-                <div class="form-group">
-                    <div>
-                        <label for="Student" class="ratio-inline"><input type="radio" name="iden" value="S" id="Student">Student</label>
-                        <label></label>
-                        <label for="Faculty" class="ratio-inline"><input type="radio" name="iden" value="F" id="Faculty">Faculty</label>
-                        <label></label>
-                        <label for="Alumni" class="ratio-inline"><input type="radio" name="iden" value="A" id="Alumni">Alumni</label>
-                        <label></label>
-                        <label for="Outsiders" class="ratio-inline"><input type="radio" name="iden" value="O" id="Outsiders">Outsider</label>
+            <form action="registration.php" method="post" enctype="multipart/form-data" id="regForm">
+                
+                <!-- Step 1: Personal Details -->
+                <div id="step-1">
+                    <h5 class="mb-3">Personal Details</h5>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Full Name:" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="User Name:" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="display:block; margin-bottom:5px;">Date Of Birth</label>
+                        <input type="date" class="form-control" name="dob" id="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="display:block; margin-bottom:5px;">Identity</label>
+                        <div>
+                            <label for="Student" class="ratio-inline"><input type="radio" name="iden" value="S" id="Student" required> Student</label>
+                            <label class="mx-2"></label>
+                            <label for="Faculty" class="ratio-inline"><input type="radio" name="iden" value="F" id="Faculty"> Faculty</label>
+                            <label class="mx-2"></label>
+                            <label for="Alumni" class="ratio-inline"><input type="radio" name="iden" value="A" id="Alumni"> Alumni</label>
+                            <label class="mx-2"></label>
+                            <label for="Outsiders" class="ratio-inline"><input type="radio" name="iden" value="O" id="Outsiders"> Outsider</label>
+                        </div>
+                    </div>
+                    <div class="form-btn text-end">
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Next <i class='bx bx-right-arrow-alt'></i></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="email" class="form-control" name="email" placeholder="Email:">
+
+                <!-- Step 2: Account Details -->
+                <div id="step-2" style="display:none;">
+                    <h5 class="mb-3">Account Details</h5>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email:" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password:" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="repeat_password" id="repeat_password" placeholder="Repeat Password:" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Profile Picture</label>
+                        <input type="file" class="form-control" name="pp">
+                    </div>
+                    <div class="form-btn d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class='bx bx-left-arrow-alt'></i> Back</button>
+                        <button type="submit" class="btn btn-primary" value="Register" name="submit">Register</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Password:">
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" name="repeat_password" placeholder="Repeat Password:">
-                </div>
-                <div class="form-group">
-                <label class="form-label">Profile Picture</label>
-                <input type="file" 
-                    class="form-control"
-                    name="pp">
-            </div>
-            <div class="form-btn">
-                    <input type="submit" class="btn btn-primary" value="Register" name="submit">
-                </div>
+
             </form>
+
+            <script>
+                function nextStep() {
+                    // Simple Validation for Step 1
+                    var fullname = document.getElementById('fullname').value;
+                    var username = document.getElementById('username').value;
+                    var dob = document.getElementById('dob').value;
+                    var iden = document.querySelector('input[name="iden"]:checked');
+
+                    if(fullname === "" || username === "" || dob === "" || !iden) {
+                        alert("Please fill in all fields in this step.");
+                        return;
+                    }
+
+                    document.getElementById('step-1').style.display = 'none';
+                    document.getElementById('step-2').style.display = 'block';
+                }
+
+                function prevStep() {
+                    document.getElementById('step-2').style.display = 'none';
+                    document.getElementById('step-1').style.display = 'block';
+                }
+            </script>
             <div class="text-center mt-4">
             <p>Already Registered??  <a href="login.php">Login Here</a></p>
         </div>

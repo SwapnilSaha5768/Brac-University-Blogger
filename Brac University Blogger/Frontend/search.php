@@ -24,35 +24,48 @@ if (isset($_POST["submit"])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="assets/css/main.css">
-	<title>Search Bar</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search User</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
-<div class="auth-body">
-    <div class="auth-container">
-        <div class="auth-header">
-            <h1>Search User</h1>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <?php include 'sidebar.php'; ?>            
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="options-bar">
+            <a href="explore.php">Explore</a>
+            <a href="#">Interest</a>
         </div>
-        <form method="post">
-            <?php
-            if (isset($errorMsg)) {
-                echo "<div class='alert alert-danger'>$errorMsg</div>";
-            }
-            ?>
-            <div class="form-group">
-                <label class="form-label" style="display:block; margin-bottom:5px;">Username</label>
-                <input type="text" placeholder="Enter Username:" name="search" class="form-control" required>
+
+        <div class="auth-container" style="max-width: 600px; margin: 50px auto;">
+            <div class="auth-header">
+                <h1>Search User</h1>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Search" name="submit" class="btn-primary">
-            </div>
-            <div class="text-center mt-4">
-                <a href="index.php" style="color:var(--primary-color);">Back to Home</a>
-            </div>
-        </form>
+            <form method="post">
+                <?php
+                if (isset($errorMsg)) {
+                    echo "<div class='alert alert-danger'>$errorMsg</div>";
+                }
+                ?>
+                <div class="form-group">
+                    <label class="form-label" style="display:block; margin-bottom:5px;">Username</label>
+                    <input type="text" placeholder="Enter Username:" name="search" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Search" name="submit" class="btn-primary">
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
